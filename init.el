@@ -5,6 +5,18 @@
 
 (require 'anything-config)
 
+;;======================================================================
+;; windows.el
+;;======================================================================
+(require 'windows)
+(win:startup-with-window)
+(define-key ctl-x-map "C" 'see-you-again)
+;;======================================================================
+;; revive.el
+;;======================================================================
+(autoload 'save-current-configuration "revive" "Save status" t)
+(autoload 'resume "revive" "Resume Emacs" t)
+(autoload 'wipe "revive" "Wipe emacs" t)
 
 ;;ビープ音を消す
 (setq visible-bell t)
@@ -45,7 +57,8 @@
 ; (setq default-frame-alist
 ; 	'((width . 100) (height . 60)))
 ;; 背景を透過させる
-(set-frame-parameter nil 'alpha '(90 70))
+(add-to-list 'default-frame-alist '(alpha . (80 60)))
+(set-frame-parameter nil 'alpha '(80 60))
 ;; マウス・スクロールを滑らかにする（Mac Emacs 専用）
 ;;(setq mac-mouse-wheel-smooth-scroll t)
 (mouse-wheel-mode)
@@ -386,3 +399,4 @@
 (setq auto-install-directory "~/.emacs.d/auto-install/")
 (auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)             ; 互換性確保
+
