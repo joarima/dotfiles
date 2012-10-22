@@ -38,10 +38,8 @@
 ;; 全角記号類「！”＃＄％＆’（）＝〜｜｀『＋＊』＜＞？＿」を入力できるようにする（Mac Emacs では不要）
 ; (mac-add-key-passed-to-system 'shift)
 ;; 編集行のハイライト
-
 (global-hl-line-mode)
 ;; ウインドウ分割時に画面外へ出る文章を折り返す
-
 (setq truncate-partial-width-windows nil)
 ;; バックアップファイルを作らないようにする
 (setq make-backup-files nil)
@@ -74,6 +72,13 @@
                 '(lambda () "" (interactive) (scroll-down 2)))
 (global-set-key [triple-wheel-down]
                 '(lambda () "" (interactive) (scroll-up 2)))
+
+;;改行時にインデント
+(global-set-key "\C-m" 'newline-and-indent)
+
+;; タブ幅
+(custom-set-variables '(tab-width 4))
+
 ;; カーソルの色を設定
 ; (set-cursor-color "DarkGray")
 
@@ -185,23 +190,23 @@
 ;jaspace
 ;================================================================
 ;(add-to-list 'load-path "~/.emacs.d")
-;(require 'jaspace)
+(require 'jaspace)
 
 ;; 全角空白を表示させる
 
-;(setq jaspace-alternate-jaspace-string "□")
+(setq jaspace-alternate-jaspace-string "□")
 
 ;; 改行記号を表示させる
 
-;(setq jaspace-alternate-eol-string "↓\n")
+(setq jaspace-alternate-eol-string "↓\n")
 
 ;; タブを表示
 
-;(setq jaspace-highlight-tabs t)
+(setq jaspace-highlight-tabs t)
 
 ;; フック
 
-;(add-hook 'text-mode-hook 'jaspace-mode)
+(add-hook 'text-mode-hook 'jaspace-mode)
 
 ;================================================================
 ; YaTeX 
