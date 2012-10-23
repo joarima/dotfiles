@@ -55,8 +55,8 @@
 ; (setq default-frame-alist
 ; 	'((width . 100) (height . 60)))
 ;; 背景を透過させる
-(add-to-list 'default-frame-alist '(alpha . (80 60)))
-(set-frame-parameter nil 'alpha '(80 60))
+(add-to-list 'default-frame-alist '(alpha . (85 60)))
+(set-frame-parameter nil 'alpha '(85 60))
 ;; マウス・スクロールを滑らかにする（Mac Emacs 専用）
 ;;(setq mac-mouse-wheel-smooth-scroll t)
 (mouse-wheel-mode)
@@ -191,27 +191,20 @@
 
 
 ;================================================================
-;jaspace
+;jaspace -> whitespace-modeにした
 ;================================================================
 ;(add-to-list 'load-path "~/.emacs.d")
 ;(require 'jaspace)
-
 ;; 全角空白を表示させる
-
 ;(setq jaspace-alternate-jaspace-string "□")
-
 ;; 改行記号を表示させる
-
 ;(setq jaspace-alternate-eol-string "↓\n")
-
 ;; タブを表示
-
 ;(setq jaspace-highlight-tabs t)
-
 ;; フック
-
 ;(add-hook 'yatex-mode-hook 'jaspace-mode)
 
+;;whitespace-mode設定
 (when (and (>= emacs-major-version 23)
 	   (require 'whitespace nil t))
   (setq whitespace-style
