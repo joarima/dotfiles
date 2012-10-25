@@ -35,28 +35,39 @@
 ;;;; 種々雑多な設定
 ;; Official Emacs 用の設定（inline_patch をあててあります）
 ; (setq default-input-method "MacOSX")
+
 ;; 全角記号類「！”＃＄％＆’（）＝〜｜｀『＋＊』＜＞？＿」を入力できるようにする（Mac Emacs では不要）
 ; (mac-add-key-passed-to-system 'shift)
+
 ;; 編集行のハイライト
 (global-hl-line-mode)
+
 ;; ウインドウ分割時に画面外へ出る文章を折り返す
 (setq truncate-partial-width-windows nil)
+
 ;; バックアップファイルを作らないようにする
 (setq make-backup-files nil)
+
 ;; 括弧の対応関係をハイライト表示
 (show-paren-mode nil)
+
 ;; ツールバーを表示しないようにする（Official Emacs の場合は 0）
 ; (tool-bar-mode 0)
+
 ;; スタートアップ画面を表示しないようにする
 (setq inhibit-startup-message t)
+
 ;; 行間隔を少し広げる
 (set-default 'line-spacing 4)
+
 ;; ウィンドウ（フレーム）のサイズ設定する
 ; (setq default-frame-alist
 ; 	'((width . 100) (height . 60)))
+
 ;; 背景を透過させる
 (add-to-list 'default-frame-alist '(alpha . (85 60)))
 (set-frame-parameter nil 'alpha '(85 60))
+
 ;; マウス・スクロールを滑らかにする（Mac Emacs 専用）
 ;;(setq mac-mouse-wheel-smooth-scroll t)
 (mouse-wheel-mode)
@@ -98,7 +109,10 @@
 	  
 ;; yes or noをy or n
 (fset 'yes-or-no-p 'y-or-n-p)
-	  
+
+;;ペースト時に選択範囲を置き換える
+(delete-selection-mode 1)
+
 ;; キーの設定（ある程度 Mac 標準に準拠させる）
 (setq mac-command-key-is-meta nil)
 (setq mac-option-modifier 'meta)
