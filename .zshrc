@@ -1,6 +1,10 @@
 export PATH=$PATH:bin:sbin:/usr/bin:/usr/sbin:/usr/texbin:/Applications/CMake\ 2.8-8.app/Contents/bin:/Applications/Xcode.app/Contents/Developer/usr
 export PATH=/Applications/Ghostscript.app:/Applications/Ghostscript.app/bin:/usr/local/texlive/2012/bin/x86_64-darwin:$PATH
 
+#emacs上でzshを動かす設定
+[[ $EMACS = t ]] && unsetopt zle
+
+
 #==================================================
 #コピペ設定 http://news.mynavi.jp/column/zsh/022/index.html より
 #==================================================
@@ -248,3 +252,8 @@ esac
 #    }
 #    chpwd () {}
 #fi
+
+## create emacs env file
+perl -wle \
+    'do { print qq/(setenv "$_" "$ENV{$_}")/ if exists $ENV{$_} } for @ARGV' \
+    PATH > ~/.emacs.d/shellenv.el
