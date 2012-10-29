@@ -1,6 +1,7 @@
 (icomplete-mode 1)
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/auto-install")
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
 (setq debug-on-error t)
 
 ;;=====================================================================
@@ -38,6 +39,9 @@
 (setq multi-term-program "/bin/zsh")
 (setenv "TERMINFO" "~/.terminfo")
 ;;======================================================================
+
+;;magit
+(require 'magit)
 
 (require 'anything-config)
 
