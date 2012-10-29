@@ -5,6 +5,20 @@
 
 (require 'anything-config)
 
+;;--------------------------------------------------------------------------
+;; Cocoa Emacsでバックスラッシュが上手く入力出来ない対策
+;;
+;;   MacなEmacsでバックスラッシュを簡単に入力したい - Watsonのメモ
+;;   http://d.hatena.ne.jp/Watson/20100207/1265476938
+;;    
+;;   Carbon Emacs で「\(バックスラッシュ)」を入力する - あいぷらぷら；
+;;   http://d.hatena.ne.jp/june29/20080204/1202119521
+;;--------------------------------------------------------------------------
+;;(define-key global-map [?\¥] [?\\])
+;;(define-key global-map [?\C-¥] [?\C-\\])
+(define-key global-map [?\M-¥] [?\M-\\])
+(define-key global-map [?\C-\M-¥] [?\C-\M-\\])
+
 ;;======================================================================
 ;; windows.el
 ;;======================================================================
@@ -85,10 +99,15 @@
                 '(lambda () "" (interactive) (scroll-up 2)))
 
 ;;改行時にインデント
-(global-set-key "\C-m" 'newline-and-indent)
+;;(global-set-key "\C-m" 'newline-and-indent)
+
+(add-hook 'c-mode-common-hook
+          '(lambda ()
+             (local-set-key "\C-m" 'reindent-then-newline-and-indent)))
 
 ;; タブ幅
-(custom-set-variables '(tab-width 4))
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 
 ;; 行末の空白を強調表示
 (setq-default show-trailing-whitespace t)
@@ -445,3 +464,16 @@
 (auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)             ; 互換性確保
 
+;;========================================================================
+;;LaTeX indent
+;;========================================================================
+ (autoload 'latex-indent-command "~/.emacs.d/latex-indent"
+   "Indent current line accroding to LaTeX block structure.")
+ (autoload 'latex-indent-region-command "~/.emacs.d/latex-indent"
+   "Indent each line in the region according to LaTeX block structure.")
+ (add-hook
+  'yatex-mode-hook
+  '(lambda ()
+     (define-key tex-mode-map "\t"       'latex-indent-command)
+     ;;(define-key tex-mode-map "\C-m" 'latex-indent-command)
+     (define-key tex-mode-map "\M-\C-\\" 'latex-indent-region-command)))
