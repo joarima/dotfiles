@@ -3,6 +3,42 @@
 (add-to-list 'load-path "~/.emacs.d/auto-install")
 (setq debug-on-error t)
 
+;;=====================================================================
+;; zsh 関連
+
+;;multi-term
+(require 'multi-term)
+(setq multi-term-program shell-file-name)
+(add-hook 'term-mode-hook '(lambda ()
+			     (define-key term-raw-map "\C-y" 'term-paste)
+			     (define-key term-raw-map "\C-q" 'move-beginning-of-line)
+			     (define-key term-raw-map "\C-f" 'forward-char)
+			     (define-key term-raw-map "\C-b" 'backward-char)			     
+			     (define-key term-raw-map "\C-t" 'set-mark-command)			     
+			     (define-key term-raw-map (kbd "ESC") 'term-send-raw)
+			     (define-key term-raw-map [delete] 'term-send-raw)
+                             (define-key term-raw-map "\C-z"
+                               (lookup-key (current-global-map) "\C-z"))))
+(global-set-key (kbd "C-c n") 'multi-term-next)
+(global-set-key (kbd "C-c p") 'multi-term-prev)
+(set-language-environment  'utf-8)
+(prefer-coding-system 'utf-8)
+
+(require 'ucs-normalize) 
+(setq file-name-coding-system 'utf-8-hfs)
+(setq locale-coding-system 'utf-8-hfs)
+(setq system-uses-terminfo nil)
+
+;; load environment value
+(load-file (expand-file-name "~/.emacs.d/shellenv.el"))
+(dolist (path (reverse (split-string (getenv "PATH") ":")))
+  (add-to-list 'exec-path path))
+
+(require 'multi-term)
+(setq multi-term-program "/bin/zsh")
+(setenv "TERMINFO" "~/.terminfo")
+;;======================================================================
+
 (require 'anything-config)
 
 ;;--------------------------------------------------------------------------
@@ -10,7 +46,7 @@
 ;;
 ;;   MacなEmacsでバックスラッシュを簡単に入力したい - Watsonのメモ
 ;;   http://d.hatena.ne.jp/Watson/20100207/1265476938
-;;    
+;;
 ;;   Carbon Emacs で「\(バックスラッシュ)」を入力する - あいぷらぷら；
 ;;   http://d.hatena.ne.jp/june29/20080204/1202119521
 ;;--------------------------------------------------------------------------
@@ -267,8 +303,8 @@
 	  ))
   (setq whitespace-global-modes '(not dired-mode tar-mode))
   (global-whitespace-mode 1))
-  
-; YaTeX 
+
+; YaTeX
 ;================================================================
 ;; YaTeX-mode
 (add-to-list 'load-path "~/.emacs.d/site-lisp/yatex")
@@ -293,7 +329,7 @@
  ;; PATH と exec-path に同じ物を追加します
  (when (and (file-exists-p dir) (not (member dir exec-path)))
    (setenv "PATH" (concat dir ":" (getenv "PATH")))
-   (setq exec-path (append (list dir) exec-path))))	  
+   (setq exec-path (append (list dir) exec-path))))
 ;;(setq tex-command "~/Library/TeXShop/bin/platex2pdf-utf8" dvi2-command "open -a TexShop")
 (setq YaTeX-inhibit-prefix-letter t)
 ;;(setq tex-command "platex")
@@ -317,13 +353,13 @@
 '(lambda()
 (progn
 ;; C-lで色付けが落ちるの対策
-(define-key YaTeX-mode-map "\C-l" 
+(define-key YaTeX-mode-map "\C-l"
 'font-lock-recenter)
 )))
 ; YaTeX ショートカットの変更・設定
 ;;(setq yatex-mode-load-hook
 ;;'(lambda()
-;; (YaTeX-define-begend-key "be" "eqnarray") 
+;; (YaTeX-define-begend-key "be" "eqnarray")
 ;; (YaTeX-define-begend-key "be" "enumerate")
 ;; (YaTeX-define-begend-key "bt" "tabular")
 ;; (YaTeX-define-begend-key "bf" "figure")
@@ -358,7 +394,7 @@
 (require 'whattf-dt)
 (add-to-list 'ac-modes 'nxml-mode)
 (setq ac-delay 0.1)
- 
+
 (setq ac-use-menu-map t)
 (define-key ac-menu-map "\C-n" 'ac-next)
 (define-key ac-menu-map "\C-p" 'ac-previous)
@@ -388,7 +424,7 @@
             (setq nxml-child-indent 2)                  ; タグのインデント幅
             (setq nxml-attribute-indent 4)              ; 属性のインデント幅
             (setq indent-tabs-mode t)
-            (setq nxml-bind-meta-tab-to-complete-flag t) 
+            (setq nxml-bind-meta-tab-to-complete-flag t)
             (setq nxml-slash-auto-complete-flag t)      ; </の入力で閉じタグを補完する
             (setq nxml-sexp-element-flag t)             ; C-M-kで下位を含む要素全体をkillする
             (setq nxml-char-ref-display-glyph-flag nil) ; グリフは非表示
@@ -419,7 +455,7 @@
             (setq nxml-child-indent 2)                  ; タグのインデント幅
             (setq nxml-attribute-indent 4)              ; 属性のインデント幅
             (setq indent-tabs-mode t)
-            (setq nxml-bind-meta-tab-to-complete-flag t) 
+            (setq nxml-bind-meta-tab-to-complete-flag t)
             (setq nxml-slash-auto-complete-flag t)      ; </の入力で閉じタグを補完する
             (setq nxml-sexp-element-flag t)             ; C-M-kで下位を含む要素全体をkillする
             (setq nxml-char-ref-display-glyph-flag nil) ; グリフは非表示
@@ -445,7 +481,7 @@
  '(nxml-tag-slash-face
    ((t (:inherit nxml-name-face :foreground "blue")))))  ; /(終了タグ)
 
-;;==========================================================================   
+;;==========================================================================
 ;;括弧の自動挿入
 ;;==========================================================================
 (global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
@@ -472,7 +508,7 @@
  (autoload 'latex-indent-region-command "~/.emacs.d/latex-indent"
    "Indent each line in the region according to LaTeX block structure.")
  (add-hook
-  'yatex-mode-hook
+  'latex-mode-hook
   '(lambda ()
      (define-key tex-mode-map "\t"       'latex-indent-command)
      ;;(define-key tex-mode-map "\C-m" 'latex-indent-command)
