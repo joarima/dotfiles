@@ -22,6 +22,7 @@
                                (lookup-key (current-global-map) "\C-z"))))
 (global-set-key (kbd "C-c n") 'multi-term-next)
 (global-set-key (kbd "C-c p") 'multi-term-prev)
+
 (set-language-environment  'utf-8)
 (prefer-coding-system 'utf-8)
 
@@ -517,3 +518,20 @@
      (define-key tex-mode-map "\t"       'latex-indent-command)
      ;;(define-key tex-mode-map "\C-m" 'latex-indent-command)
      (define-key tex-mode-map "\M-\C-\\" 'latex-indent-region-command)))
+
+;;=============================================================
+;;color-moccur設定
+;;=============================================================
+(when(require 'color-moccur nil t)
+;;
+(define-key global-map (kbd "M-o") 'occur-by-moccur)
+;;
+(setq moccr-split-word t)
+;;
+(add-to-list 'dmoccur-exclusion-mask "\\.DS_store")
+(add-to-list 'dmoccur-exclusion-mask "^#.+#$")
+
+;;
+(when (and (executable-find "cmigemo")
+           (require 'migemo nil t))
+(setq moccur-use-migemo t)))
