@@ -520,18 +520,22 @@
      (define-key tex-mode-map "\M-\C-\\" 'latex-indent-region-command)))
 
 ;;=============================================================
-;;color-moccur設定
+;;color-moccur設定 emacs実践入門より
 ;;=============================================================
 (when(require 'color-moccur nil t)
-;;
+;;M-oにcolor-by-moccur割当
 (define-key global-map (kbd "M-o") 'occur-by-moccur)
-;;
+;;スペース区切りでAND検索
 (setq moccr-split-word t)
-;;
+;;ディレクトリ検索時に除外
 (add-to-list 'dmoccur-exclusion-mask "\\.DS_store")
 (add-to-list 'dmoccur-exclusion-mask "^#.+#$")
 
-;;
+;;MIgemo
 (when (and (executable-find "cmigemo")
            (require 'migemo nil t))
 (setq moccur-use-migemo t)))
+
+;;ついでにmoccur-editも
+(require 'moccur-edit)
+
