@@ -37,7 +37,7 @@
   (add-to-list 'exec-path path))
 
 (require 'multi-term)
-(setq multi-term-program "/bin/zsh")
+(setq multi-term-program "/usr/local/bin/zsh-4.3.17")
 (setenv "TERMINFO" "~/.terminfo")
 ;;======================================================================
 
@@ -211,6 +211,9 @@
 	line) 'face 'linum)))
 (setq linum-format "%5d ")
 
+;;cua-mode
+(cua-mode t)
+(setq cua-enable-cua-keys nil) ; そのままだと C-x が切り取りになってしまったりするので無効化
 
 ;;======================================================================
 ;; elscreen
@@ -219,32 +222,32 @@
 ;; apel http://git.chise.org/elisp/dist/semi/
 ;;======================================================================
 
-(load "elscreen" "ElScreen" t)
-
-
-;; タブを表示(非表示にする場合は nil を設定する)
-(setq elscreen-display-tab t)
-
-;; 自動でスクリーンを作成
-(defmacro elscreen-create-automatically (ad-do-it)
-  `(if (not (elscreen-one-screen-p))
-       ,ad-do-it
-     (elscreen-create)
-     (elscreen-notify-screen-modification 'force-immediately)
-     (elscreen-message "New screen is automatically created")))
-
-(defadvice elscreen-next (around elscreen-create-automatically activate)
-  (elscreen-create-automatically ad-do-it))
-
-(defadvice elscreen-previous (around elscreen-create-automatically activate)
-  (elscreen-create-automatically ad-do-it))
-
-(defadvice elscreen-toggle (around elscreen-create-automatically activate)
-  (elscreen-create-automatically ad-do-it))
-
-;; タブ移動を簡単に
-(define-key global-map (kbd "M-t") 'elscreen-next)
-
+;load "elscreen" "ElScreen" t)
+;
+;
+;;; タブを表示(非表示にする場合は nil を設定する)
+;(setq elscreen-display-tab t)
+;
+;;; 自動でスクリーンを作成
+;(defmacro elscreen-create-automatically (ad-do-it)
+;  `(if (not (elscreen-one-screen-p))
+;       ,ad-do-it
+;     (elscreen-create)
+;     (elscreen-notify-screen-modification 'force-immediately)
+;     (elscreen-message "New screen is automatically created")))
+;
+;(defadvice elscreen-next (around elscreen-create-automatically activate)
+;  (elscreen-create-automatically ad-do-it))
+;
+;(defadvice elscreen-previous (around elscreen-create-automatically activate)
+;  (elscreen-create-automatically ad-do-it))
+;
+;(defadvice elscreen-toggle (around elscreen-create-automatically activate)
+;  (elscreen-create-automatically ad-do-it))
+;
+;;; タブ移動を簡単に
+;(define-key global-map (kbd "M-t") 'elscreen-next)
+;
 ;; frame-titleにスクリーンの一覧を表示する
 ;; (defun elscreen-frame-title-update ()
 ;;   (when (elscreen-screen-modified-p 'elscreen-frame-title-update)
