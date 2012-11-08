@@ -1,5 +1,12 @@
-export PATH=$PATH:bin:sbin:/usr/bin:/usr/sbin:/usr/texbin:/Applications/CMake\ 2.8-8.app/Contents/bin:/Applications/Xcode.app/Contents/Developer/usr
-export PATH=/Applications/Ghostscript.app:/Applications/Ghostscript.app/bin:/usr/local/texlive/2012/bin/x86_64-darwin:$PATH
+#export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/texbin:/Applications/CMake\ 2.8-8.app/Contents/bin:/Applications/Xcode.app/Contents/Developer/usr:/Applications/Ghostscript.app:/Applications/Ghostscript.app/bin:/usr/local/texlive/2012/bin/x86_64-darwin:$PATH
+
+#PKG_CONFIG_PATH=$usr/local/lib/pkgconfig/:${PKG_CONFIG_PATH}
+#export PKG_CONFIG_PATH
+#export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}
+DYLD_FALLBACK_LIBRARY_PATH=$/usr/local/lib:$DYLD_FALLBACK_LIBRARY_PATH
+export DYLD_FALLBACK_LIBRARY_PATH
+export INCLUDE_PATH=/usr/local/include/opencv:/usr/local/include/opencv2:$INCLUDE_PATH
+
 
 #emacs上でzshを動かす設定
 [[ $EMACS = t ]] && unsetopt zle
