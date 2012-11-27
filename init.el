@@ -62,16 +62,33 @@
 
 ;;======================================================================
 ;; windows.el
-;;======================================================================
+;;======================================================================n
+(defvar win:switch-prefix "\C-z")
 (require 'windows)
+(setq win:use-frame nil)
 (win:startup-with-window)
-(define-key ctl-x-map "C" 'see-you-again)
+;; C-x C-c で終了するとそのときのウィンドウの状態を保存する
+;; C-x C なら保存しない
+(define-key ctl-x-map "\C-c" 'see-you-again)
+(define-key ctl-x-map "C" 'save-buffers-kill-emacs)
+(define-key global-map "\C-c\C-r" 'resume-windows)
+
+;; キーバインド C-z にを変更。デフォルトは C-c C-w。
+;; 変更しない場合は，以下の 3 行を削除する。
+;;C-z n   前のウィンドウ
+;;C-z p   後のウィンドウ
+;;C-z !   現在のウィンドウを破棄
+;;C-z C-m メニューの表示
+;;C-z ;   ウィンドウの一覧を表示
+
 ;;======================================================================
 ;; revive.el
 ;;======================================================================
 (autoload 'save-current-configuration "revive" "Save status" t)
 (autoload 'resume "revive" "Resume Emacs" t)
 (autoload 'wipe "revive" "Wipe emacs" t)
+;;(add-hook 'kill-emacs-hook 'save-current-configuration)   ; 終了時に保存
+ (resume) ; 起動時に復元
 
 ;;ビープ音を消す
 (setq visible-bell t)
@@ -116,8 +133,8 @@
 (set-default 'line-spacing 4)
 
 ;; ウィンドウ（フレーム）のサイズ設定する
-; (setq default-frame-alist
-; 	'((width . 100) (height . 60)))
+ (setq default-frame-alist
+ 	'((width . 200) (height . 60) (top . 0)(left . 0)))
 
 ;; 背景を透過させる
 (add-to-list 'default-frame-alist '(alpha . (85 60)))
