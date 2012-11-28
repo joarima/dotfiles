@@ -87,8 +87,8 @@
 (autoload 'save-current-configuration "revive" "Save status" t)
 (autoload 'resume "revive" "Resume Emacs" t)
 (autoload 'wipe "revive" "Wipe emacs" t)
-;;(add-hook 'kill-emacs-hook 'save-current-configuration)   ; 終了時に保存
- (resume) ; 起動時に復元
+(add-hook 'kill-emacs-hook 'save-current-configuration)   ; 終了時に保存
+(resume-windows 0) ; 起動時に復元
 
 ;;ビープ音を消す
 (setq visible-bell t)
