@@ -357,12 +357,12 @@
    (setenv "PATH" (concat dir ":" (getenv "PATH")))
    (setq exec-path (append (list dir) exec-path))))
 (setq tex-command "~/Library/TeXShop/bin/platex2pdf-utf8" dvi2-command "open -a TexShop")
-(setq YaTeX-inhibit-prefix-letter t)
-(setq tex-command "platex")
-(defvar YaTeX-dvi2-command-ext-alist
-  '(("xdvi" . ".dvi")
-    ("ghostview¥¥|gv" . ".ps")
-    ("acroread¥¥|pdf¥¥|Preview¥¥|TeXShop¥¥|Skim" . ".pdf")))
+;(setq YaTeX-inhibit-prefix-letter t)
+;(setq tex-command "platex")
+;(defvar YaTeX-dvi2-command-ext-alist
+;  '(("xdvi" . ".dvi")
+;    ("ghostview¥¥|gv" . ".ps")
+;    ("acroread¥¥|pdf¥¥|Preview¥¥|TeXShop¥¥|Skim" . ".pdf")))
 
 ;; YaHtml-mode
 (setq auto-mode-alist
