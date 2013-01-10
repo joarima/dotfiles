@@ -3,93 +3,6 @@
 (add-to-list 'load-path "~/.emacs.d/auto-install")
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
 (setq debug-on-error t)
-
-;;=====================================================================
-;; zsh 関連
-
-;;multi-term
-(require 'multi-term)
-(setq multi-term-program shell-file-name)
-(add-hook 'term-mode-hook '(lambda ()
-			     (define-key term-raw-map "\C-y" 'term-paste)
-			     (define-key term-raw-map "\C-q" 'move-beginning-of-line)
-			     (define-key term-raw-map "\C-f" 'forward-char)
-			     (define-key term-raw-map "\C-b" 'backward-char)			     
-			     (define-key term-raw-map "\C-t" 'set-mark-command)			     
-			     (define-key term-raw-map (kbd "ESC") 'term-send-raw)
-			     (define-key term-raw-map [delete] 'term-send-raw)
-                             (define-key term-raw-map "\C-z"
-                               (lookup-key (current-global-map) "\C-z"))))
-(global-set-key (kbd "C-c n") 'multi-term-next)
-(global-set-key (kbd "C-c p") 'multi-term-prev)
-
-(set-language-environment  'utf-8)
-(prefer-coding-system 'utf-8)
-
-(require 'ucs-normalize) 
-(setq file-name-coding-system 'utf-8-hfs)
-(setq locale-coding-system 'utf-8-hfs)
-(setq system-uses-terminfo nil)
-
-;; load environment value
-(load-file (expand-file-name "~/.emacs.d/shellenv.el"))
-(dolist (path (reverse (split-string (getenv "PATH") ":")))
-  (add-to-list 'exec-path path))
-
-(require 'multi-term)
-(setq multi-term-program "/usr/local/bin/zsh-4.3.17")
-(setenv "TERMINFO" "~/.terminfo")
-;;======================================================================
-
-;;magit
-(require 'magit)
-
-(require 'anything-config)
-
-;;--------------------------------------------------------------------------
-;; Cocoa Emacsでバックスラッシュが上手く入力出来ない対策
-;;
-;;   MacなEmacsでバックスラッシュを簡単に入力したい - Watsonのメモ
-;;   http://d.hatena.ne.jp/Watson/20100207/1265476938
-;;
-;;   Carbon Emacs で「\(バックスラッシュ)」を入力する - あいぷらぷら；
-;;   http://d.hatena.ne.jp/june29/20080204/1202119521
-;;--------------------------------------------------------------------------
-;;(define-key global-map [?\¥] [?\\])
-;;(define-key global-map [?\C-¥] [?\C-\\])
-(define-key global-map [?\M-¥] [?\M-\\])
-(define-key global-map [?\C-\M-¥] [?\C-\M-\\])
-
-;;======================================================================
-;; windows.el
-;;======================================================================n
-(defvar win:switch-prefix "\C-z")
-(require 'windows)
-(setq win:use-frame nil)
-(win:startup-with-window)
-;; C-x C-c で終了するとそのときのウィンドウの状態を保存する
-;; C-x C なら保存しない
-(define-key ctl-x-map "\C-c" 'see-you-again)
-(define-key ctl-x-map "C" 'save-buffers-kill-emacs)
-(define-key global-map "\C-c\C-r" 'resume-windows)
-
-;; キーバインド C-z にを変更。デフォルトは C-c C-w。
-;; 変更しない場合は，以下の 3 行を削除する。
-;;C-z n   前のウィンドウ
-;;C-z p   後のウィンドウ
-;;C-z !   現在のウィンドウを破棄
-;;C-z C-m メニューの表示
-;;C-z ;   ウィンドウの一覧を表示
-
-;;======================================================================
-;; revive.el
-;;======================================================================
-(autoload 'save-current-configuration "revive" "Save status" t)
-(autoload 'resume "revive" "Resume Emacs" t)
-(autoload 'wipe "revive" "Wipe emacs" t)
-(add-hook 'kill-emacs-hook 'save-current-configuration)   ; 終了時に保存
-(resume-windows 0) ; 起動時に復元
-
 ;;ビープ音を消す
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
@@ -183,7 +96,7 @@
 ;; タイトルバーにファイルのフルパス表示
 (setq frame-title-format
       (format "%%f - Emacs@%s" (system-name)))
-	  
+
 ;; yes or noをy or n
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -220,13 +133,93 @@
 (require 'linum)
 (global-linum-mode 0)
 (global-set-key [f5] 'linum-mode)
-(setq linum-format 
-	(lambda (line) (propertize (format 
-		(let ((w (length (number-to-string 
+(setq linum-format
+	(lambda (line) (propertize (format
+		(let ((w (length (number-to-string
 			(count-lines (point-min) (point-max))
 		)))) (concat "%" (number-to-string w) "d "))
 	line) 'face 'linum)))
 (setq linum-format "%5d ")
+
+;;=====================================================================
+;; zsh 関連
+
+;;multi-term
+(require 'multi-term)
+(setq multi-term-program shell-file-name)
+(add-hook 'term-mode-hook '(lambda ()
+			     (define-key term-raw-map "\C-y" 'term-paste)
+			     (define-key term-raw-map "\C-q" 'move-beginning-of-line)
+			     (define-key term-raw-map "\C-f" 'forward-char)
+			     (define-key term-raw-map "\C-b" 'backward-char)
+			     (define-key term-raw-map "\C-t" 'set-mark-command)
+			     (define-key term-raw-map (kbd "ESC") 'term-send-raw)
+			     (define-key term-raw-map [delete] 'term-send-raw)
+                             (define-key term-raw-map "\C-z"
+                               (lookup-key (current-global-map) "\C-z"))))
+(global-set-key (kbd "C-c n") 'multi-term-next)
+(global-set-key (kbd "C-c p") 'multi-term-prev)
+
+(set-language-environment  'utf-8)
+(set-default-coding-systems 'utf-8)
+
+(require 'ucs-normalize)
+(setq file-name-coding-system 'utf-8-hfs)
+(setq locale-coding-system 'utf-8-hfs)
+(setq system-uses-terminfo nil)
+
+;; load environment value
+(load-file (expand-file-name "~/.emacs.d/shellenv.el"))
+(dolist (path (reverse (split-string (getenv "PATH") ":")))
+  (add-to-list 'exec-path path))
+
+(require 'multi-term)
+(setq multi-term-program "/usr/local/bin/zsh-4.3.17")
+(setenv "TERMINFO" "~/.terminfo")
+;;======================================================================
+
+;;magit
+(require 'magit)
+
+(require 'anything-config)
+
+;;--------------------------------------------------------------------------
+;; Cocoa Emacsでバックスラッシュが上手く入力出来ない対策
+;;
+;;   MacなEmacsでバックスラッシュを簡単に入力したい - Watsonのメモ
+;;   http://d.hatena.ne.jp/Watson/20100207/1265476938
+;;
+;;   Carbon Emacs で「\(バックスラッシュ)」を入力する - あいぷらぷら；
+;;   http://d.hatena.ne.jp/june29/20080204/1202119521
+;;--------------------------------------------------------------------------
+;;(define-key global-map [?\¥] [?\\])
+;;(define-key global-map [?\C-¥] [?\C-\\])
+(define-key global-map [?\M-¥] [?\M-\\])
+(define-key global-map [?\C-\M-¥] [?\C-\M-\\])
+
+;;======================================================================
+;; windows.el
+;;======================================================================n
+(defvar win:switch-prefix "\C-z")
+(require 'windows)
+(setq win:use-frame nil)
+(win:startup-with-window)
+;; C-x C-c で終了するとそのときのウィンドウの状態を保存する
+;; C-x C なら保存しない
+(define-key ctl-x-map "\C-c" 'see-you-again)
+(define-key ctl-x-map "C" 'save-buffers-kill-emacs)
+(define-key global-map "\C-c\C-r" 'resume-windows)
+
+;; キーバインド C-z にを変更。デフォルトは C-c C-w。
+;; 変更しない場合は，以下の 3 行を削除する。
+;;C-z n   前のウィンドウ
+;;C-z p   後のウィンドウ
+;;C-z !   現在のウィンドウを破棄
+;;C-z C-m メニューの表示
+;;C-z ;   ウィンドウの一覧を表示
+
+
+
 
 ;;cua-mode
 (cua-mode t)
@@ -329,6 +322,7 @@
 	  ))
   (setq whitespace-global-modes '(not dired-mode tar-mode))
   (global-whitespace-mode 1))
+
 ;================================================================
 ; YaTeX
 ;================================================================
@@ -340,18 +334,45 @@
 (setq dvi2-command "open -a TeXShop"
       tex-command "~/Library/TeXShop/bin/platex2pdf-utf8"
       YaTeX-kanji-code nil)
+
+;;(setq dvi2-command "open -a TeXShop"
+;;      tex-command "/usr/texbin/platex"
+;;      YaTeX-kanji-code nil)
+
+
 (dolist (dir (list
               "/sbin"
               "/usr/sbin"
               "/bin"
               "/usr/bin"
               "/opt/local/bin"
-              "/sw/bin"
+              "/smagiw/bin"
               "/usr/local/bin"
               "/usr/texbin"
               (expand-file-name "~/bin")
               (expand-file-name "~/.emacs.d/bin")
               ))
+
+;;(setq tex-command "/usr/texbin/platex -kanji=utf8"
+;;      ;;dviprint-command-format "/usr/texbin/dvipdfmx %s"
+;;      dvi2-command "open -a TeXShop"
+;;      YaTeX-use-LaTeX2e t)
+;;(setq YaTeX-use-AMS-LaTeX t)
+;;(setq tex-command "/usr/texbin/platex")
+;;(setq tex-command "/Users/joea/Library/TeXShop/bin/platex2pdf-utf8")
+;;(setq tex-command "latexmk -f -pdfdvi")
+;; bibtexコマンドの設定
+(setq bibtex-command "/usr/texbin/pbibtex -kanji=utf8")
+
+(setq YaTeX-dvi2-command-ext-alist nil)
+; dvi2-commandで自動的に拡張子を補完してくれるようにする設定
+;;(setq YaTeX-dvi2-command-ext-alist
+;;  '(("xdvi\\|dvipdfmx" . ".dvi")
+;;    ("ghostview\\|gv" . ".ps")
+;;    ("acroread\\|pdf\\|Preview\\|TeXShop" . ".pdf")))
+;;
+;;(setq YaTeX-inhibit-prefix-letter t)
+
  ;; PATH と exec-path に同じ物を追加します
  (when (and (file-exists-p dir) (not (member dir exec-path)))
    (setenv "PATH" (concat dir ":" (getenv "PATH")))
@@ -560,3 +581,11 @@
 ;;ついでにmoccur-editも
 (require 'moccur-edit)
 
+;;======================================================================
+;; revive.el
+;;======================================================================
+(autoload 'save-current-configuration "revive" "Save status" t)
+(autoload 'resume "revive" "Resume Emacs" t)
+(autoload 'wipe "revive" "Wipe emacs" t)
+(add-hook 'kill-emacs-hook 'save-current-configuration)   ; 終了時に保存
+(resume-windows 0) ; 起動時に復元
