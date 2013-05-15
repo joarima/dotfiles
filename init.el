@@ -12,6 +12,9 @@
 ;; 日本語の設定（UTF-8）
 (set-language-environment 'Japanese)
 (set-default-coding-systems 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-buffer-file-coding-system 'utf-8)
 ;;(prefer-coding-system 'utf-8)
 
 ; ことえりで日本語
@@ -331,13 +334,14 @@
 (setq auto-mode-alist
 (cons (cons "\\.tex$" 'yatex-mode) auto-mode-alist))
 (autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
-(setq dvi2-command "open -a TeXShop"
-      tex-command "~/Library/TeXShop/bin/platex2pdf-utf8"
-      YaTeX-kanji-code nil)
+;;(setq dvi2-command "open -a TeXShop"
+;;      tex-command "~/Library/TeXShop/bin/platex2pdf-utf8"
+;;      YaTeX-kanji-code nil)
 
 ;;(setq dvi2-command "open -a TeXShop"
-;;      tex-command "/usr/texbin/platex"
-;;      YaTeX-kanji-code nil)
+;;      tex-command "/usr/texbin/platex -kanji=utf8"
+;;      YaTeX-kanji-code nil
+;;      YaTeX-use-LaTeX2e t)
 
 
 (dolist (dir (list
@@ -353,25 +357,23 @@
               (expand-file-name "~/.emacs.d/bin")
               ))
 
-;;(setq tex-command "/usr/texbin/platex -kanji=utf8"
-;;      ;;dviprint-command-format "/usr/texbin/dvipdfmx %s"
-;;      dvi2-command "open -a TeXShop"
-;;      YaTeX-use-LaTeX2e t)
-;;(setq YaTeX-use-AMS-LaTeX t)
-;;(setq tex-command "/usr/texbin/platex")
-;;(setq tex-command "/Users/joea/Library/TeXShop/bin/platex2pdf-utf8")
-;;(setq tex-command "latexmk -f -pdfdvi")
-;; bibtexコマンドの設定
-(setq bibtex-command "/usr/texbin/pbibtex -kanji=utf8")
+(setq tex-command "/usr/texbin/platex2pdf-utf8"
+      ;;dviprint-command-format "/usr/texbin/dvipdfmx %s"
+      dvi2-command "open -a TeXShop"
+      YaTeX-use-LaTeX2e t)
+(setq YaTeX-use-AMS-LaTeX t)
 
-(setq YaTeX-dvi2-command-ext-alist nil)
+;; bibtexコマンドの設定
+(setq bibtex-command "/usr/texbin/pbibtex")
+
+;;(setq YaTeX-dvi2-command-ext-alist nil)
 ; dvi2-commandで自動的に拡張子を補完してくれるようにする設定
 ;;(setq YaTeX-dvi2-command-ext-alist
 ;;  '(("xdvi\\|dvipdfmx" . ".dvi")
 ;;    ("ghostview\\|gv" . ".ps")
 ;;    ("acroread\\|pdf\\|Preview\\|TeXShop" . ".pdf")))
 ;;
-;;(setq YaTeX-inhibit-prefix-letter t)
+(setq YaTeX-inhibit-prefix-letter t)
 
  ;; PATH と exec-path に同じ物を追加します
  (when (and (file-exists-p dir) (not (member dir exec-path)))
