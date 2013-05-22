@@ -50,7 +50,7 @@
 
 ;; ウィンドウ（フレーム）のサイズ設定する
  (setq default-frame-alist
- 	'((width . 200) (height . 60) (top . 0)(left . 0)))
+'((width . 200) (height . 60) (top . 0)(left . 0)))
 
 ;; 背景を透過させる
 (add-to-list 'default-frame-alist '(alpha . (85 60)))
@@ -143,6 +143,18 @@
 		)))) (concat "%" (number-to-string w) "d "))
 	line) 'face 'linum)))
 (setq linum-format "%5d ")
+
+;;===========================
+;;Aspell
+;;===========================
+;; スペルチェッカとしてaspellを指定
+(setq-default ispell-program-name "aspell")
+;; 日本語混じりのTeX文書でスペルチェック
+(eval-after-load "ispell"
+'(add-to-list 'ispell-skip-region-alist '("[^\000-\377]+")))
+;; ユーザー辞書の定義
+(setq ispell-personal-dictionary "~/.aspell.en.pws")
+
 
 ;;=====================================================================
 ;; zsh 関連
@@ -412,7 +424,7 @@
 ;; (YaTeX-define-begend-key "be" "enumerate")
 ;; (YaTeX-define-begend-key "bt" "tabular")
 ;; (YaTeX-define-begend-key "bf" "figure")
-;; (YaTeX-define-begend-key "ba" "align")
+;; (YaTeX-define-begend-key "ba" "align")2
 ;;)
 ;;)
 
