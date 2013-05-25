@@ -194,6 +194,7 @@
 ;;======================================================================
 
 ;;magit
+(add-to-list 'load-path "~/lisp/magit/share/emacs/site-lisp/")
 (require 'magit)
 
 (require 'anything-config)
@@ -374,7 +375,7 @@
       dvi2-command "open -a TeXShop"
       YaTeX-use-LaTeX2e t)
 (setq YaTeX-use-AMS-LaTeX t)
-
+(setq YaTeX-kanji-code 4)
 ;; bibtexコマンドの設定
 (setq bibtex-command "/usr/texbin/pbibtex")
 
