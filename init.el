@@ -121,6 +121,10 @@
 ;;(global-set-key "\C-h" 'delete-backward-char)
 (global-set-key "\M-h" 'help)
 
+;; Undo limit
+(setq undo-limit 100000)
+(setq undo-strong-limit 130000)
+
 ;; フォントの設定
 ;; 出典：http://sakito.jp/emacs/emacs23.html
 (create-fontset-from-ascii-font "Menlo-12:weight=normal:slant=normal" nil "menlokakugo")
