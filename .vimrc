@@ -5,8 +5,9 @@ set clipboard=unnamed
 set number
 set hidden
 set incsearch
-set shiftwidth=4
-set tabstop=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 set smarttab
 set autoindent
@@ -15,23 +16,25 @@ set showmatch
 set smartcase
 set nowrapscan
 set mouse=a
+set noswapfile
+set nobackup
 " set list
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-Bundle 'gmarik/vundle'
+"Ctrl+cでノーマルモード
+imap <C-c> <esc>
 
-Bundle 'git://github.com/kana/vim-fakeclip.git'
+"NerdTreeのタブ移動
+nnoremap <C-n> gt
+nnoremap <C-p> gT
 
-" set number
-function Togglenumber()
+function Setnumber()
   if &number
     setlocal nonumber
   else
     setlocal number
   endif
 endfunction
-nnoremap <silent> <C-m> :call Togglenumber()<CR>
+nnoremap <silent> <C-m> :call Setnumber()<CR>
 
 "NeoBundle Scripts-----------------------------
 if &compatible
@@ -48,6 +51,7 @@ call neobundle#begin(expand('/Users/joea/.vim/bundle'))
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 
+
 " Add or remove your Bundles here:
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet.vim'
@@ -58,6 +62,10 @@ NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'Shougo/unite.vim'
 let g:neocomplete#enable_at_startup = 1
 let g:neosnippet#enable_snipmate_compatibility = 1
+
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+
+let g:neocomplete#enable_insert_char_pre = 1
 
 " ------------------------------------------------------------
 " NeoSnippetの設定
@@ -90,6 +98,16 @@ NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 
 " ファイルをtree表示してくれる
 NeoBundle 'scrooloose/nerdtree'
+" 隠しファイルをデフォルトで表示させる
+let NERDTreeShowHidden = 1
+" デフォルトでツリーを表示させる
+autocmd VimEnter * execute 'NERDTree'
+" <C-e>でNERDTreeをオンオフ いつでもどこでも
+nmap <silent> <C-e>      :NERDTreeToggle<CR>
+vmap <silent> <C-e> <Esc>:NERDTreeToggle<CR>
+omap <silent> <C-e>      :NERDTreeToggle<CR>
+imap <silent> <C-e> <Esc>:NERDTreeToggle<CR>
+cmap <silent> <C-e> <C-u>:NERDTreeToggle<CR>
 
 " Rails向けのコマンドを提供する
 NeoBundle 'tpope/vim-rails'
@@ -115,6 +133,14 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 " emmet-vim
 NeoBundle 'mattn/emmet-vim'
 let g:user_emmet_leader_key='<C-Z>'
+
+"surround.vim
+NeoBundle 'surround.vim'
+
+"smartinputで"などの自動補完
+"NeoBundle 'kana/vim-smartinput'
+
+NeoBundle 'Raimondi/delimitMate'
 
 " http://inari.hatenablog.com/entry/2014/05/05/231307
 """"""""""""""""""""""""""""""
@@ -172,9 +198,10 @@ endfunction
 """"""""""""""""""""""""""""""
 " 自動的に閉じ括弧を入力
 """"""""""""""""""""""""""""""
-imap { {}<LEFT>
-imap [ []<LEFT>
-imap ( ()<LEFT>
+"imap { {}<LEFT>
+"imap [ []<LEFT>
+"imap ( ()<LEFT>
+
 """"""""""""""""""""""""""""""
 
 " Required:
@@ -191,3 +218,62 @@ NeoBundleCheck
 syntax on
 colorscheme molokai
 set t_Co=256
+hi Comment ctermfg=102
+hi Visual  ctermbg=3
+hi CursorLine ctermbg=238
+
+
+"ビープ音すべてを無効にする
+set visualbell t_vb=
+set noerrorbells "エラーメッセージの表示時にビープを鳴らさない
+
+
+function! s:get_syn_id(transparent)
+  let synid = synID(line("."), col("."), 1)
+  if a:transparent
+    return synIDtrans(synid)
+  else
+    return synid
+  endif
+endfunction
+function! s:get_syn_attr(synid)
+  let name = synIDattr(a:synid, "name")
+  let ctermfg = synIDattr(a:synid, "fg", "cterm")
+  let ctermbg = synIDattr(a:synid, "bg", "cterm")
+  let guifg = synIDattr(a:synid, "fg", "gui")
+  let guibg = synIDattr(a:synid, "bg", "gui")
+  return {
+        \ "name": name,
+        \ "ctermfg": ctermfg,
+        \ "ctermbg": ctermbg,
+        \ "guifg": guifg,
+        \ "guibg": guibg}
+endfunction
+function! s:get_syn_info()
+  let baseSyn = s:get_syn_attr(s:get_syn_id(0))
+  echo "name: " . baseSyn.name .
+        \ " ctermfg: " . baseSyn.ctermfg .
+        \ " ctermbg: " . baseSyn.ctermbg .
+        \ " guifg: " . baseSyn.guifg .
+        \ " guibg: " . baseSyn.guibg
+  let linkedSyn = s:get_syn_attr(s:get_syn_id(1))
+  echo "link to"
+  echo "name: " . linkedSyn.name .
+        \ " ctermfg: " . linkedSyn.ctermfg .
+        \ " ctermbg: " . linkedSyn.ctermbg .
+        \ " guifg: " . linkedSyn.guifg .
+        \ " guibg: " . linkedSyn.guibg
+endfunction
+command! Synfo call s:get_syn_info()
+
+if has("autocmd")
+  augroup redhat
+    " In text files, always limit the width of text to 78 characters
+    autocmd BufRead *.txt set tw=78
+    " When editing a file, always jump to the last cursor position
+    autocmd BufReadPost *
+    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+    \   exe "normal! g'\"" |
+    \ endif
+  augroup END
+endif
