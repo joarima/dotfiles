@@ -1,7 +1,7 @@
 set nocompatible
 set directory=$HOME/.vim
 set backupdir=$HOME/.vim
-set clipboard=unnamed
+set clipboard=unnamed,unnamedplus
 set number
 set hidden
 set incsearch
@@ -16,9 +16,13 @@ set showmatch
 set smartcase
 set nowrapscan
 set mouse=a
+set ttymouse=xterm2
 set noswapfile
 set nobackup
-" set list
+" 行末・行頭から次の行へ移動可能に
+set whichwrap+=h,l,<,>,[,],b,s
+" □や○の文字があってもカーソル位置がずれないようにする
+set ambiwidth=double
 
 "Ctrl+cでノーマルモード
 imap <C-c> <esc>
@@ -36,6 +40,12 @@ function Setnumber()
 endfunction
 nnoremap <silent> <C-m> :call Setnumber()<CR>
 
+map <F9> :set paste<CR>
+map <F10> :set nopaste<CR>
+imap <F9> <C-O>:set paste<CR>
+imap <F10> <nop>
+set pastetoggle=<F10>
+
 "NeoBundle Scripts-----------------------------
 if &compatible
   set nocompatible               " Be iMproved
@@ -51,6 +61,20 @@ call neobundle#begin(expand('/Users/joea/.vim/bundle'))
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 
+"htmlタグ対応ハイライト
+NeoBundle 'valloric/matchtagalways'
+"MatchTagAlwaysのオプション機能ONにする
+let g:mta_use_matchparen_group = 1
+
+"MatchTagAlwaysを使用するファイルタイプ
+let g:mta_filetypes = {
+    \ 'html' : 1,
+    \ 'xhtml' : 1,
+    \ 'xml' : 1,
+    \ 'jinja' : 1,
+    \ 'php' : 1,
+    \ 'html.erb' : 1,
+    \}
 
 " Add or remove your Bundles here:
 NeoBundle 'Shougo/neocomplete'
@@ -62,8 +86,12 @@ NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'Shougo/unite.vim'
 let g:neocomplete#enable_at_startup = 1
 let g:neosnippet#enable_snipmate_compatibility = 1
-
+"インサートモードでバックスペース、カーソル移動時にneocompleteの補完を消す
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><Left>  neocomplete#cancel_popup() . "\<Left>"
+inoremap <expr><Right> neocomplete#cancel_popup() . "\<Right>"
+inoremap <expr><Up>    pumvisible() ? "\<Up>"    : neocomplete#cancel_popup() . "\<Up>"
+inoremap <expr><Down>  pumvisible() ? "\<Down>"  : neocomplete#cancel_popup() . "\<Down>"
 
 let g:neocomplete#enable_insert_char_pre = 1
 
@@ -137,10 +165,95 @@ let g:user_emmet_leader_key='<C-Z>'
 "surround.vim
 NeoBundle 'surround.vim'
 
-"smartinputで"などの自動補完
-"NeoBundle 'kana/vim-smartinput'
-
+"(などの自動補完
 NeoBundle 'Raimondi/delimitMate'
+"ステータスライン色付け
+"========================================
+NeoBundle 'itchyny/lightline.vim'
+let g:lightline = {
+        \ 'colorscheme': 'wombat',
+        \ 'mode_map': {'c': 'NORMAL'},
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+        \ },
+        \ 'component_function': {
+        \   'modified': 'LightlineModified',
+        \   'readonly': 'LightlineReadonly',
+        \   'fugitive': 'LightlineFugitive',
+        \   'filename': 'LightlineFilename',
+        \   'fileformat': 'LightlineFileformat',
+        \   'filetype': 'LightlineFiletype',
+        \   'fileencoding': 'LightlineFileencoding',
+        \   'mode': 'LightlineMode'
+        \ }
+        \ }
+
+function! LightlineModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightlineReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? 'x' : ''
+endfunction
+
+function! LightlineFilename()
+  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft == 'unite' ? unite#get_status_string() :
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
+
+function! LightlineFugitive()
+  if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+    return fugitive#head()
+  else
+    return ''
+  endif
+endfunction
+
+function! LightlineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightlineFiletype()
+  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightlineFileencoding()
+  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+endfunction
+
+function! LightlineMode()
+  return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+"lightline.vim end
+"=======================================
+"Git
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'gregsexton/gitv'
+
+
+"html5,css3,scss
+NeoBundle 'othree/html5.vim'
+NeoBundle 'hail2u/vim-css3-syntax'
+"NeoBundle 'JulesWang/css.vim'
+NeoBundle 'cakebaker/scss-syntax.vim'
+"DBをさわれる
+NeoBundle 'vim-scripts/dbext.vim'
+" 環境に合わせてクライアントプログラムを変更
+" (ver.20.0 からはデフォルトでsqlite3)
+let g:dbext_default_SQLITE_bin = 'sqlite3'
+" プロファイルの定義
+"let g:dbext_default_profile_MySQL_test = 'type=SQLSRV:integratedlogin=1:dbname=myDB'
+"let g:dbext_default_profile_SQLServer_test = 'type=SQLSRV:integratedlogin=1:dbname=myDB'
+let g:dbext_default_profile_sqlite = 'type=SQLITE:dbname=/dbpath/test.db'
+"デフォルトで使用するプロファイルを指定
+let g:dbext_default_profile = 'sqlite'
+
+"htmlインデント設定
+let g:html_indent_inctags = "html,body,head,tbody"
 
 " http://inari.hatenablog.com/entry/2014/05/05/231307
 """"""""""""""""""""""""""""""
@@ -158,51 +271,14 @@ if has('syntax')
     augroup END
     call ZenkakuSpace()
 endif
-""""""""""""""""""""""""""""""
 
-" https://sites.google.com/site/fudist/Home/vim-nihongo-ban/-vimrc-sample
-""""""""""""""""""""""""""""""
-" 挿入モード時、ステータスラインの色を変更
-""""""""""""""""""""""""""""""
-let g:hi_insert = 'highlight StatusLine guifg=darkblue guibg=darkyellow gui=none ctermfg=blue ctermbg=yellow cterm=none'
+"python補完
+NeoBundle 'davidhalter/jedi-vim'
+"python関連設定(タブ幅など)
+"autocmd FileType python setl autoindent
+"autocmd FileType python setl smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+"autocmd FileType python setl tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
-if has('syntax')
-  augroup InsertHook
-    autocmd!
-    autocmd InsertEnter * call s:StatusLine('Enter')
-    autocmd InsertLeave * call s:StatusLine('Leave')
-augroup END
-endif
-
-let s:slhlcmd = ''
-function! s:StatusLine(mode)
-  if a:mode == 'Enter'
-    silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
-    silent exec g:hi_insert
-  else
-    highlight clear StatusLine
-    silent exec s:slhlcmd
-  endif
-endfunction
-
-function! s:GetHighlight(hi)
-  redir => hl
-  exec 'highlight '.a:hi
-  redir END
-  let hl = substitute(hl, '[\r\n]', '', 'g')
-  let hl = substitute(hl, 'xxx', '', '')
-  return hl
-endfunction
-""""""""""""""""""""""""""""""
-
-""""""""""""""""""""""""""""""
-" 自動的に閉じ括弧を入力
-""""""""""""""""""""""""""""""
-"imap { {}<LEFT>
-"imap [ []<LEFT>
-"imap ( ()<LEFT>
-
-""""""""""""""""""""""""""""""
 
 " Required:
 call neobundle#end()
