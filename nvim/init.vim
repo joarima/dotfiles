@@ -40,13 +40,9 @@ if dein#load_state(s:dein_cache_dir)
     if has('nvim')
         call dein#load_toml(s:toml_dir . '/neovim.toml', {'lazy': 1})
     endif
-    call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
-    call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+
     call dein#end()
     call dein#save_state()
-    " session
-    call dein#add('xolox/vim-misc')
-    call dein#add('xolox/vim-session')
 endif
 
 if has('vim_starting') && dein#check_install()
@@ -55,7 +51,7 @@ endif
 " }}}
 
 "setting neovim end
-
+let g:python3_host_prog = expand('~/.pyenv/versions/neovim3/bin/python')
 "denite.nvim設定
 nnoremap [denite] <Nop>
 nmap <C-u> [denite]
@@ -63,6 +59,7 @@ nnoremap <silent> [denite]b :Denite buffer<CR>
 nnoremap <silent> [denite]c :Denite changes<CR>
 nnoremap <silent> [denite]f :Denite file<CR>
 nnoremap <silent> [denite]g :Denite grep<CR>
+nnoremap <silent> [denite]h :Denite help<CR>
 nnoremap <silent> [denite]h :Denite help<CR>
 nnoremap <silent> [denite]l :Denite line<CR>
 nnoremap <silent> [denite]t :Denite tag<CR>
@@ -98,15 +95,6 @@ set whichwrap+=h,l,<,>,[,],b,s
 " □や○の文字があってもカーソル位置がずれないようにする
 set ambiwidth=double
 
-set encoding=utf-8
-set fileencodings=utf-8
-set fileformats=unix,dos,mac
-set clipboard=unnamed
-set clipboard+=unnamedplus
-set list
-set ignorecase
-set splitright
-
 "set wildignorecase
 "set wildmode=full,full
 
@@ -116,16 +104,6 @@ imap <C-c> <esc>
 "NerdTreeのタブ移動
 nnoremap <C-n> gt
 nnoremap <C-p> gT
-
-map <F8> :tabdo e!<CR>
-imap <F8> :tabdo e!<CR>
-
-map <F7> :vsplit<CR>
-
-"検索後のハイライトを消す
-nnoremap <F3> :noh<CR>
-
-set backspace=indent,eol,start
 
 "function Setnumber_toggle()
 "  if &number
@@ -141,6 +119,8 @@ map <F10> :set nopaste<CR>
 imap <F9> <C-O>:set paste<CR>
 imap <F10> <nop>
 set pastetoggle=<F10>
+
+nnoremap <F7> :vsplit<CR>
 
 "カラースキーム設定
 set termguicolors
@@ -237,14 +217,6 @@ omap <silent> <C-e>      :NERDTreeToggle<CR>
 imap <silent> <C-e> <Esc>:NERDTreeToggle<CR>
 cmap <silent> <C-e> <C-u>:NERDTreeToggle<CR>
 
-"ctrl-pでfzf.vimの:Filesを開く
-nmap <silent> <C-p> :Files<CR>
-"ctrl-aでfzf.vimの:Agを開く
-nmap <silent> <C-a> :Ag<CR>
-"fzf設定
-" [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
-
 let g:mta_use_matchparen_group = 1
 
 "MatchTagAlwaysを使用するファイルタイプ
@@ -287,14 +259,3 @@ augroup END
 "let g:jedi#rename_command = "<leader>R"
 "let g:jedi#popup_on_dot = 1
 "autocmd FileType python let b:did_ftplugin = 1
-"
-" Simple re-format for minified Javascript
-command! UnMinify call UnMinify()
-function! UnMinify()
-    %s/{\ze[^\r\n]/{\r/g
-    %s/){/) {/g
-    %s/};\?\ze[^\r\n]/\0\r/g
-    %s/;\ze[^\r\n]/;\r/g
-    %s/[^\s]\zs[=&|]\+\ze[^\s]/ \0 /g
-    normal ggVG=
-  endfunction
