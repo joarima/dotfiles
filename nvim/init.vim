@@ -34,15 +34,24 @@ if dein#load_state(s:dein_cache_dir)
     call dein#begin(s:dein_cache_dir)
 
     let s:toml_dir = g:config_home . '/nvim/dein'
-
+    call dein#add('Shougo/denite.nvim')
     call dein#load_toml(s:toml_dir . '/plugins.toml', {'lazy': 0})
     call dein#load_toml(s:toml_dir . '/lazy.toml', {'lazy': 1})
     if has('nvim')
         call dein#load_toml(s:toml_dir . '/neovim.toml', {'lazy': 1})
     endif
 
+    call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
+    call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+
     call dein#end()
     call dein#save_state()
+
+    " session
+    call dein#add('xolox/vim-misc')
+
+    "vim-slim
+    call dein#add('slim-template/vim-slim')
 endif
 
 if has('vim_starting') && dein#check_install()
@@ -51,15 +60,16 @@ endif
 " }}}
 
 "setting neovim end
-let g:python3_host_prog = expand('~/.pyenv/versions/neovim3/bin/python')
+"let g:python3_host_prog = expand('~/.pyenv/versions/neovim3/bin/python')
+let g:python_host_prog  = '~/.pyenv/versions/2.7.15/bin/python2.7'
+let g:python3_host_prog = '~/.pyenv/versions/3.7.0/bin/python3.7'
 "denite.nvim設定
 nnoremap [denite] <Nop>
-nmap <C-u> [denite]
+map <C-u> [denite]
 nnoremap <silent> [denite]b :Denite buffer<CR>
 nnoremap <silent> [denite]c :Denite changes<CR>
 nnoremap <silent> [denite]f :Denite file<CR>
 nnoremap <silent> [denite]g :Denite grep<CR>
-nnoremap <silent> [denite]h :Denite help<CR>
 nnoremap <silent> [denite]h :Denite help<CR>
 nnoremap <silent> [denite]l :Denite line<CR>
 nnoremap <silent> [denite]t :Denite tag<CR>
@@ -68,6 +78,15 @@ nnoremap <silent> [denite]u :Denite menu<CR>
 nnoremap <silent> [denite]r :Denite -resume<CR>
 
 nnoremap <silent> fj :<C-u>DeniteCursorWord grep:.<CR>
+
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  " filtering ウィンドウを開く
+  nnoremap <silent><buffer><expr> i       denite#do_map('open_filter_buffer')
+  " Denite を閉じる
+  nnoremap <silent><buffer><expr> q       denite#do_map('quit')
+  nnoremap <silent><buffer><expr> t       denite#do_map(context, 'tabopen', context['targets'])
+endfunction
 
 "=========================================
 "setting from vimrc
@@ -95,6 +114,16 @@ set whichwrap+=h,l,<,>,[,],b,s
 " □や○の文字があってもカーソル位置がずれないようにする
 set ambiwidth=double
 
+set encoding=utf-8
+set fileencodings=utf-8
+set fileformats=unix,dos,mac
+set clipboard=unnamed
+set clipboard+=unnamedplus
+set list
+set ignorecase
+set splitright
+
+
 "set wildignorecase
 "set wildmode=full,full
 
@@ -121,6 +150,15 @@ imap <F10> <nop>
 set pastetoggle=<F10>
 
 nnoremap <F7> :vsplit<CR>
+
+map <F8> :tabdo e!<CR>
+imap <F8> :tabdo e!<CR>
+
+"検索後のハイライトを消す
+nnoremap <F3> :noh<CR>
+
+set backspace=indent,eol,start
+
 
 "カラースキーム設定
 set termguicolors
@@ -217,6 +255,15 @@ omap <silent> <C-e>      :NERDTreeToggle<CR>
 imap <silent> <C-e> <Esc>:NERDTreeToggle<CR>
 cmap <silent> <C-e> <C-u>:NERDTreeToggle<CR>
 
+"ctrl-pでfzf.vimの:Filesを開く
+nmap <silent> <C-p> :Files<CR>
+"ctrl-aでfzf.vimの:Agを開く
+nmap <silent> <C-a> :Ag<CR>
+"fzf設定
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+
 let g:mta_use_matchparen_group = 1
 
 "MatchTagAlwaysを使用するファイルタイプ
@@ -259,3 +306,6 @@ augroup END
 "let g:jedi#rename_command = "<leader>R"
 "let g:jedi#popup_on_dot = 1
 "autocmd FileType python let b:did_ftplugin = 1
+
+"vim-slimの設定
+autocmd BufRead,BufNewFile *.slim setfiletype slim
