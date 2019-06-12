@@ -34,7 +34,7 @@ if dein#load_state(s:dein_cache_dir)
     call dein#begin(s:dein_cache_dir)
 
     let s:toml_dir = g:config_home . '/nvim/dein'
-    call dein#add('Shougo/denite.nvim')
+    "call dein#add('Shougo/denite.nvim')
     call dein#load_toml(s:toml_dir . '/plugins.toml', {'lazy': 0})
     call dein#load_toml(s:toml_dir . '/lazy.toml', {'lazy': 1})
     if has('nvim')
@@ -62,14 +62,14 @@ endif
 "setting neovim end
 "let g:python3_host_prog = expand('~/.pyenv/versions/neovim3/bin/python')
 let g:python_host_prog  = '~/.pyenv/versions/2.7.15/bin/python2.7'
-let g:python3_host_prog = '~/.pyenv/versions/3.7.0/bin/python3.7'
+let g:python3_host_prog = '/Users/arima/.pyenv/versions/3.7.0/bin/python3.7'
 "denite.nvim設定
 nnoremap [denite] <Nop>
 map <C-u> [denite]
 nnoremap <silent> [denite]b :Denite buffer<CR>
 nnoremap <silent> [denite]c :Denite changes<CR>
 nnoremap <silent> [denite]f :Denite file<CR>
-nnoremap <silent> [denite]g :Denite grep<CR>
+nnoremap <silent> [denite]g :Denite grep -buffer-name=search-buffer-denite<CR>
 nnoremap <silent> [denite]h :Denite help<CR>
 nnoremap <silent> [denite]l :Denite line<CR>
 nnoremap <silent> [denite]t :Denite tag<CR>
@@ -83,9 +83,11 @@ autocmd FileType denite call s:denite_my_settings()
 function! s:denite_my_settings() abort
   " filtering ウィンドウを開く
   nnoremap <silent><buffer><expr> i       denite#do_map('open_filter_buffer')
+  nnoremap <silent> <expr> <buffer> <CR>    denite#do_map('do_action')
   " Denite を閉じる
   nnoremap <silent><buffer><expr> q       denite#do_map('quit')
-  nnoremap <silent><buffer><expr> t       denite#do_map(context, 'tabopen', context['targets'])
+  nnoremap <silent><expr><buffer> t       denite#do_map('vsplit')
+  call denite#custom#map('normal', "t", '<denite:do_action:vsplit>')
 endfunction
 
 "=========================================

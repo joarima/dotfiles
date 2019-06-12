@@ -1,6 +1,7 @@
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 hook_post_source = '''
+    echo "hook_post_source"
     call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
     call denite#custom#var('grep', 'command', ['ag'])
     call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
@@ -10,6 +11,11 @@ hook_post_source = '''
     call denite#custom#var('grep', 'final_opts', [])
     call denite#custom#map('insert', "<C-t>", '<denite:do_action:vsplit>')
     call denite#custom#map('normal', "t", '<denite:do_action:vsplit>')
+    call denite#custom#option('default', {
+      \ 'highlight_filter_background': 'CursorLine',
+      \ 'source_names': 'short',
+      \ 'split': 'floating',
+      \ })
 '''
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
