@@ -89,6 +89,7 @@ function! s:denite_my_settings() abort
   nnoremap <silent><expr><buffer> t       denite#do_map('vsplit')
   nnoremap <silent><buffer><expr> p       denite#do_map('do_action', 'preview')
   nnoremap <silent><buffer><expr> t       denite#do_map('do_action', 'vsplit')
+  nnoremap <silent><buffer><expr> <C-t>   denite#do_map('do_action', 'tabopen')
 endfunction
 
 "=========================================
