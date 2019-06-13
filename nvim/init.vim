@@ -87,7 +87,8 @@ function! s:denite_my_settings() abort
   " Denite を閉じる
   nnoremap <silent><buffer><expr> q       denite#do_map('quit')
   nnoremap <silent><expr><buffer> t       denite#do_map('vsplit')
-  call denite#custom#map('normal', "t", '<denite:do_action:vsplit>')
+  nnoremap <silent><buffer><expr> p       denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> t       denite#do_map('do_action', 'vsplit')
 endfunction
 
 "=========================================
