@@ -86,10 +86,11 @@ function! s:denite_my_settings() abort
   nnoremap <silent> <expr> <buffer> <CR>    denite#do_map('do_action')
   " Denite を閉じる
   nnoremap <silent><buffer><expr> q       denite#do_map('quit')
-  nnoremap <silent><expr><buffer> t       denite#do_map('vsplit')
+  nnoremap <silent><buffer><expr> <C-c>   denite#do_map('quit')
   nnoremap <silent><buffer><expr> p       denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> t       denite#do_map('do_action', 'vsplit')
-  nnoremap <silent><buffer><expr> <C-t>   denite#do_map('do_action', 'tabopen')
+  nnoremap <silent><buffer><expr> <C-t>   denite#do_map('do_action', 'vsplit')
+  nnoremap <silent><buffer><expr> <C-s>   denite#do_map('do_action', 'split')
+  nnoremap <silent><buffer><expr> t   denite#do_map('do_action', 'tabopen')
 endfunction
 
 "=========================================
@@ -115,8 +116,7 @@ set nobackup
 set backupskip+=/home/tmp/*,/private/tmp/*
 " 行末・行頭から次の行へ移動可能に
 set whichwrap+=h,l,<,>,[,],b,s
-" □や○の文字があってもカーソル位置がずれないようにする
-set ambiwidth=double
+
 
 set encoding=utf-8
 set fileencodings=utf-8
@@ -126,7 +126,9 @@ set clipboard+=unnamedplus
 set list
 set ignorecase
 set splitright
-
+set splitbelow
+" □や○の文字があってもカーソル位置がずれないようにする
+set ambiwidth=double
 
 "set wildignorecase
 "set wildmode=full,full
@@ -135,8 +137,8 @@ set splitright
 imap <C-c> <esc>
 
 "NerdTreeのタブ移動
-nnoremap <C-n> gt
-nnoremap <C-p> gT
+nnoremap <C-m> gt
+nnoremap <C-n> gT
 
 "function Setnumber_toggle()
 "  if &number
@@ -259,10 +261,23 @@ omap <silent> <C-e>      :NERDTreeToggle<CR>
 imap <silent> <C-e> <Esc>:NERDTreeToggle<CR>
 cmap <silent> <C-e> <C-u>:NERDTreeToggle<CR>
 
+"JsBeautifier
+map <c-f> :call JsBeautify()<cr>
+" or
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+" for json
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+" for jsx
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+" for html
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+" for css or scss
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+
 "ctrl-pでfzf.vimの:Filesを開く
 nmap <silent> <C-p> :Files<CR>
 "ctrl-aでfzf.vimの:Agを開く
-nmap <silent> <C-a> :Ag<CR>
+"nmap <silent> <C-a> :Ag<CR>
 "fzf設定
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1

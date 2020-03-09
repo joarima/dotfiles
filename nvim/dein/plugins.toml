@@ -230,6 +230,29 @@ depends = 'fzf'
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
 
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+
 #slimシンタックスハイライト
 [[plugins]]
 repo = 'slim-template/vim-slim'
+
+[[plugins]]
+repo = 'maksimr/vim-jsbeautify'
+[[plugins]]
+repo = 'tpope/vim-pathogen'
+
+[[plugins]]
+repo = 'ngmy/vim-rubocop'
+[[plugins]]
+repo = 'scrooloose/syntastic.git'
+hook_add = '''
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_ruby_checkers=['rubocop', 'mri']
+'''
