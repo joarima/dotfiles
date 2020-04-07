@@ -140,14 +140,9 @@ imap <C-c> <esc>
 nnoremap <C-m> gt
 nnoremap <C-n> gT
 
-"function Setnumber_toggle()
-"  if &number
-"    setlocal nonumber
-"  else
-"    setlocal number
-"  endif
-"endfunction
-"nnoremap <silent> <C-m> :call Setnumber_toggle()<CR>
+nnoremap gr :tabprevious
+
+nmap <Enter> :set invnumber<CR>
 
 map <F9> :set paste<CR>
 map <F10> :set nopaste<CR>
